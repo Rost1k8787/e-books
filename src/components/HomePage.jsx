@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Button } from "@mui/material";
 import { bookBlock, titleStyle, buttonStyle, bookList } from "../styles/homePage";
 import Modal from "./Modal";
@@ -6,8 +7,9 @@ import ProductCard from "./ProductCard";
 
 
 function HomePage() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+ 
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
@@ -15,14 +17,19 @@ function HomePage() {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
   const [products, setProducts] =useState([]);
 
    useEffect(() => {
-    fetch("https://booksback.vercel.app/api/books")
-      .then((response) => response.json())
-      .then((data) => setProducts(data))
-      .catch((error) => console.error("Error fetching products:", error));
-  }, []);
+    axios.get('https://booksback.vercel.app/api/books')
+    .then((response) => {
+      setProducts(response.data);
+      console.log(response.data);
+    })
+    .catch((error) => {
+      console.error('Error fetching products:', error);
+    });
+}, []);
 
   return (
     <div className="book-block" style={bookBlock}>

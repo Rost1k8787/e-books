@@ -1,8 +1,14 @@
 import React, { useState } from "react";
+import axios from "axios";
+import { useDispatch } from 'react-redux';
+
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { modalStyle, inputStyle, btnFlex } from "../styles/modal";
+import { addCardSuccess, addCardFailure } from '../store/actions';
+
+
 function ChildModal({ isOpen, closeModal }) {
   const [title, setTitle] = useState("");
   const [year, setYear] = useState("");
@@ -11,12 +17,14 @@ function ChildModal({ isOpen, closeModal }) {
   const [titleValidation, setTitleValidation] = useState("");
   const [yearValidate, setYearValidate] = useState("");
   const [authorValidate, setAuthorValidate] = useState("");
-  const [imgUrlValidate, setImgUrlValidate] = useState("")
+  const [imgUrlValidate, setImgUrlValidate] = useState("");
+
+  const dispatch = useDispatch();
 
 
   const validateTitle = (title) => {
-    if (title.length < 2 || title.length > 21) {
-      setTitleValidation("Title should be 2 to 21 characters");
+    if (title.length < 2 || title.length > 56) {
+      setTitleValidation("Title should be 2 to 56 characters");
       return false;
     }
     setTitleValidation("");
@@ -34,8 +42,8 @@ function ChildModal({ isOpen, closeModal }) {
   };
 
   const validateAuthor = (author) => {
-    if (author.length < 2 || author.length > 12) {
-    setAuthorValidate("Title should be 2 to 12 characters");
+    if (author.length < 2 || author.length > 36) {
+    setAuthorValidate("Title should be 2 to 36 characters");
       return false;
     }
     setAuthorValidate("");
@@ -79,10 +87,41 @@ function ChildModal({ isOpen, closeModal }) {
   validateImageURL(e.target.value);
 };
 
+const handleAddBook = async () => {
+  if (validateTitle(title) && validateYear(year) && validateAuthor(author) && validateImageURL(imgUrl)) {
+    try {
+      const response = await axios.post('https://booksback.vercel.app/api/books', {
+        title: title,
+        year: parseInt(year),
+        author: author,
+        imgUrl: imgUrl
+      });
+
+      dispatch(addCardSuccess(response.data));
+      closeModal();
+
+      setTitle("");
+      setYear("");
+      setAuthor("");
+      setImgUrl("");
+      setTitleValidation("");
+      setYearValidate("");
+      setAuthorValidate("");
+      setImgUrlValidate("");
+
+    } catch (error) {
+      dispatch(addCardFailure(error.message));
+    }
+  } else {
+    console.error('Data validation failed.');
+  }
+};
+
   return (
     <Modal
       keepMounted
       open={isOpen}
+      onClose={closeModal}
       aria-labelledby="keep-mounted-modal-title"
       aria-describedby="keep-mounted-modal-description"
     >
@@ -189,7 +228,7 @@ function ChildModal({ isOpen, closeModal }) {
       },
     }}
   >
-    <Button variant="contained">
+    <Button variant="contained" onClick={handleAddBook}>
       Add Book
     </Button>
     <Button variant="contained" onClick={closeModal}>
