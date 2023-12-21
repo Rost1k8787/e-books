@@ -48,6 +48,7 @@ function HomePage() {
           title={product.title}
           description={`By ${product.author}, ${product.year}`}
           imgUrl={product.imgUrl}
+          id={product._id}
         />
       ))}
       </div>

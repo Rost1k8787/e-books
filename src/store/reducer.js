@@ -21,8 +21,9 @@ const cardReducer = (state = initialState, action) => {
     case CURRENT_CARD :
       return {
         ...state,
-        error: action.payload,
+        currentCard: action.payload,
       }
+      
     default:
       return state;
   }

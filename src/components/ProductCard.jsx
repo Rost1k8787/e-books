@@ -5,8 +5,8 @@ import { cardStyle, cardMediaStyle } from "../styles/productCard";
 import { currentCard } from '../store/actions';
 import DeleteModal from "./deletModal";
 
-function ProductCard({ title, description, imgUrl, _id}) {
-  console.log(_id, 222);
+function ProductCard({ title, description, imgUrl, id}) {
+
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const dispatch = useDispatch();
 
@@ -30,8 +30,7 @@ function ProductCard({ title, description, imgUrl, _id}) {
         </Typography>
         <Button variant="outlined" color="error" onClick={()=>{
           handleDeleteOpenModal()
-          dispatch(currentCard(_id))
-          console.log(_id, 111)
+          dispatch(currentCard(id))
         }}>
           Delete
         </Button>
