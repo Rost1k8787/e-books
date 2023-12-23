@@ -6,7 +6,7 @@ import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import { modalStyle, inputStyle, btnFlex } from "../styles/modal";
-import { addCardSuccess, addCardFailure } from '../store/actions';
+import { addCard } from '../store/actions';
 
 
 function ChildModal({ isOpen, closeModal }) {
@@ -97,7 +97,7 @@ const handleAddBook = async () => {
         imgUrl: imgUrl
       });
 
-      dispatch(addCardSuccess(response.data));
+      dispatch(addCard(response.data));
       closeModal();
 
       setTitle("");
@@ -110,7 +110,6 @@ const handleAddBook = async () => {
       setImgUrlValidate("");
 
     } catch (error) {
-      dispatch(addCardFailure(error.message));
     }
   } else {
     console.error('Data validation failed.');

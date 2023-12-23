@@ -1,10 +1,12 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { deleteCard } from '../store/actions';
+
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import axios from 'axios';
-import { deleteBook } from './yourActions';
+
 
 const DeleteConfirmationModal = ({ isOpen, closeModal}) => {
   const dispatch = useDispatch();
@@ -13,7 +15,7 @@ const DeleteConfirmationModal = ({ isOpen, closeModal}) => {
   const handleDelete = async () => {
     try {
       await axios.delete(`https://booksback.vercel.app/api/books/${currentCard}`);
-      dispatch(deleteBook(currentCard)); 
+      dispatch(deleteCard(currentCard)); 
       closeModal();
     } catch (error) {
       console.error("Error deleting the product:", error);

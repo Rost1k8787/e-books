@@ -1,29 +1,32 @@
-import { ADD_CARD_SUCCESS, ADD_CARD_FAILURE, CURRENT_CARD } from './actionTypes';
+import { ADD_CARD,  CURRENT_CARD, RENDER_CARD, DELETE_CARD } from './actionTypes';
 
 const initialState = {
   cards: [],
-  error: null,
+  cardData : [],
 };
 
 const cardReducer = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_CARD_SUCCESS:
+    case ADD_CARD:
       return {
         ...state,
-        cards: [...state.cards, action.payload],
-        error: null,
-      };
-    case ADD_CARD_FAILURE:
-      return {
-        ...state,
-        error: action.payload,
+        cardData: [...state.cardData, action.payload],
       };
     case CURRENT_CARD :
       return {
         ...state,
         currentCard: action.payload,
       }
-      
+    case RENDER_CARD : 
+    return {
+      ...state,
+      cardData : action.payload
+    }
+    case DELETE_CARD:
+    return {
+    ...state,
+    cardData: state.cardData.filter(item => item._id !== action.payload)
+    };
     default:
       return state;
   }

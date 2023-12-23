@@ -4,11 +4,15 @@ import { Button } from "@mui/material";
 import { bookBlock, titleStyle, buttonStyle, bookList } from "../styles/homePage";
 import Modal from "./Modal";
 import ProductCard from "./ProductCard";
+import { useDispatch, useSelector } from "react-redux";
+import { renderCard } from "../store/actions";
 
 
 function HomePage() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const dispatch = useDispatch();
+  const cardData = useSelector(state => state.cardData);
  
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -24,7 +28,7 @@ function HomePage() {
     axios.get('https://booksback.vercel.app/api/books')
     .then((response) => {
       setProducts(response.data);
-      console.log(response.data);
+      dispatch(renderCard(response.data))
     })
     .catch((error) => {
       console.error('Error fetching products:', error);
@@ -42,7 +46,7 @@ function HomePage() {
         </Button>
       </div>
       <div style={bookList}>
-        {products.map((product) => (
+        {cardData.map((product) => (
         <ProductCard
           key={product._id} 
           title={product.title}

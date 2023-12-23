@@ -1,13 +1,8 @@
-import { ADD_CARD_SUCCESS, ADD_CARD_FAILURE, CURRENT_CARD, RENDER_CARD, DELETE_CARD } from './actionTypes';
+import { ADD_CARD,  CURRENT_CARD, RENDER_CARD, DELETE_CARD } from './actionTypes';
 
-export const addCardSuccess = (cardData) => ({
-  type: ADD_CARD_SUCCESS,
-  payload: cardData,
-});
-
-export const addCardFailure = (error) => ({
-  type: ADD_CARD_FAILURE,
-  payload: error,
+export const addCard = (card) => ({
+  type : ADD_CARD, 
+  payload : card
 });
 
 export const currentCard = (id) => ({
