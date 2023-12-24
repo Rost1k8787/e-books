@@ -1,15 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 import axios from "axios";
-import { useDispatch } from 'react-redux';
-
-import Modal from "@mui/material/Modal";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
+import { addCard, renderCard } from "../store/actions";
+import { Modal, Box, Button } from "@mui/material";
 import { modalStyle, inputStyle, btnFlex } from "../styles/modal";
-import { addCard } from '../store/actions';
 
 
-const  ChildModal = ({ isOpen, closeModal }) => {
+
+const UpdateModal = ({ isOpen, closeModal }) => {
   const [title, setTitle] = useState("");
   const [year, setYear] = useState("");
   const [author, setAuthor] = useState("");
@@ -87,10 +85,23 @@ const  ChildModal = ({ isOpen, closeModal }) => {
   validateImageURL(e.target.value);
 };
 
-const handleAddBook = async () => {
+const [products, setProducts] =useState([]);
+
+   useEffect(() => {
+    axios.get('https://booksback.vercel.app/api/books')
+    .then((response) => {
+      setProducts(response.data);
+      dispatch(renderCard(response.data))
+    })
+    .catch((error) => {
+      console.error('Error fetching products:', error);
+    });
+}, []);
+
+const handleUpdateBook = async () => {
   if (validateTitle(title) && validateYear(year) && validateAuthor(author) && validateImageURL(imgUrl)) {
     try {
-      const response = await axios.post('https://booksback.vercel.app/api/books', {
+      const response = await axios.put('https://booksback.vercel.app/api/books', {
         title: title,
         year: parseInt(year),
         author: author,
@@ -106,9 +117,9 @@ const handleAddBook = async () => {
     console.error('Data validation failed.');
   }
 };
-
-  return (
-    <Modal
+  
+    return (
+        <Modal
       keepMounted
       open={isOpen}
       onClose={closeModal}
@@ -218,8 +229,8 @@ const handleAddBook = async () => {
       },
     }}
   >
-    <Button variant="contained" onClick={handleAddBook}>
-      Add Book
+    <Button variant="contained" onClick={handleUpdateBook}>
+      Update Book
     </Button>
     <Button variant="contained" onClick={closeModal}>
       Exit
@@ -227,7 +238,7 @@ const handleAddBook = async () => {
   </Box>
 </Box>
     </Modal>
-  );
+    )
 }
 
-export default ChildModal;
+export default UpdateModal

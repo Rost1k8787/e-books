@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { renderCard } from "../store/actions";
 
 
-function HomePage() {
+const HomePage = ()=> {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useDispatch();

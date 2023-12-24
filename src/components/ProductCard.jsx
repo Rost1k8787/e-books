@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import { React, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Card, CardContent, CardMedia, Typography, Button } from "@mui/material";
 import { cardStyle, cardMediaStyle } from "../styles/productCard";
 import { currentCard } from '../store/actions';
 import DeleteModal from "./deletModal";
+import UpdateModal from "./updateModal";
 
-function ProductCard({ title, description, imgUrl, id}) {
+const ProductCard = ({ title, description, imgUrl, id}) =>{
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [ isUpdateModalOpen, setIsUpdateModalOpen] = useState(false)
   const dispatch = useDispatch();
 
   const handleDeleteOpenModal = () => {
@@ -18,6 +20,15 @@ function ProductCard({ title, description, imgUrl, id}) {
     setIsDeleteModalOpen(false);
   };
 
+  const handleUpdateOpenModal = () => {
+    setIsUpdateModalOpen(true);
+  };
+
+  const handleUpdateCloseModal = () => {
+    setIsUpdateModalOpen(false);
+  };
+
+
   return (
     <Card style={cardStyle}>
       <CardMedia style={cardMediaStyle} component="img" image={imgUrl} alt={title} />
@@ -27,7 +38,12 @@ function ProductCard({ title, description, imgUrl, id}) {
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {description}
-        </Typography>
+        </Typography>  <Button variant="outlined" color="error" onClick={()=>{
+          handleUpdateOpenModal()
+          dispatch(currentCard(id))
+        }}>
+          Update
+        </Button>
         <Button variant="outlined" color="error" onClick={()=>{
           handleDeleteOpenModal()
           dispatch(currentCard(id))
@@ -35,6 +51,7 @@ function ProductCard({ title, description, imgUrl, id}) {
           Delete
         </Button>
       </CardContent>
+      <UpdateModal isOpen={ isUpdateModalOpen} closeModal={handleUpdateCloseModal} />
       <DeleteModal isOpen={isDeleteModalOpen} closeModal={handleDeleteCloseModal} />
     </Card>
   );
