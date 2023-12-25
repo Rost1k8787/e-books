@@ -1,4 +1,4 @@
-import { ADD_CARD,  CURRENT_CARD, RENDER_CARD, DELETE_CARD } from './actionTypes';
+import { ADD_CARD,  CURRENT_CARD, RENDER_CARD, DELETE_CARD, UPDATE_CARD } from './actionTypes';
 
 const initialState = {
   cards: [],
@@ -27,6 +27,15 @@ const cardReducer = (state = initialState, action) => {
     ...state,
     cardData: state.cardData.filter(item => item._id !== action.payload)
     };
+    case UPDATE_CARD :
+     return {
+     ...state,
+     cardData: state.cardData.map(item =>
+     item._id === action.payload._id
+      ? { ...item, ...action.payload }
+      : item
+  )
+};
     default:
       return state;
   }

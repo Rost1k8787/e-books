@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { React, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Card, CardContent, CardMedia, Typography, Button } from "@mui/material";
@@ -5,6 +6,7 @@ import { cardStyle, cardMediaStyle } from "../styles/productCard";
 import { currentCard } from '../store/actions';
 import DeleteModal from "./deletModal";
 import UpdateModal from "./updateModal";
+
 
 const ProductCard = ({ title, description, imgUrl, id}) =>{
 
@@ -20,7 +22,11 @@ const ProductCard = ({ title, description, imgUrl, id}) =>{
     setIsDeleteModalOpen(false);
   };
 
+   const [selectedCardData, setSelectedCardData] = useState(null);
+
+
   const handleUpdateOpenModal = () => {
+    setSelectedCardData({ title, description, imgUrl, id });
     setIsUpdateModalOpen(true);
   };
 
@@ -38,11 +44,13 @@ const ProductCard = ({ title, description, imgUrl, id}) =>{
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {description}
-        </Typography>  <Button variant="outlined" color="error" onClick={()=>{
+        </Typography> 
+        <Button variant="outlined" color="error" onClick={()=>{
           handleUpdateOpenModal()
           dispatch(currentCard(id))
+          console.log(currentCard(id))
         }}>
-          Update
+          Change
         </Button>
         <Button variant="outlined" color="error" onClick={()=>{
           handleDeleteOpenModal()

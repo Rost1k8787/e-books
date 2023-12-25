@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { addCard, renderCard } from "../store/actions";
+import { updateCard } from "../store/actions";
 import { Modal, Box, Button } from "@mui/material";
 import { modalStyle, inputStyle, btnFlex } from "../styles/modal";
 
@@ -18,6 +20,7 @@ const UpdateModal = ({ isOpen, closeModal }) => {
   const [imgUrlValidate, setImgUrlValidate] = useState("");
 
   const dispatch = useDispatch();
+  const currentCard = useSelector(state => state.currentCard);
 
 
   const validateTitle = (title) => {
@@ -85,30 +88,18 @@ const UpdateModal = ({ isOpen, closeModal }) => {
   validateImageURL(e.target.value);
 };
 
-const [products, setProducts] =useState([]);
-
-   useEffect(() => {
-    axios.get('https://booksback.vercel.app/api/books')
-    .then((response) => {
-      setProducts(response.data);
-      dispatch(renderCard(response.data))
-    })
-    .catch((error) => {
-      console.error('Error fetching products:', error);
-    });
-}, []);
-
 const handleUpdateBook = async () => {
   if (validateTitle(title) && validateYear(year) && validateAuthor(author) && validateImageURL(imgUrl)) {
-    try {
-      const response = await axios.put('https://booksback.vercel.app/api/books', {
+    const updatedObject = {
+        id : _id,
         title: title,
         year: parseInt(year),
         author: author,
         imgUrl: imgUrl
-      });
-
-      dispatch(addCard(response.data));
+    };
+    try {
+      const response = await axios.put(`https://booksback.vercel.app/api/books/${currentCard}`,updatedObject );
+      dispatch(updateCard(updatedObject));
       closeModal();
 
     } catch (error) {
@@ -117,6 +108,7 @@ const handleUpdateBook = async () => {
     console.error('Data validation failed.');
   }
 };
+
   
     return (
         <Modal
