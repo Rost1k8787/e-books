@@ -3,7 +3,7 @@ import { React, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Card, CardContent, CardMedia, Typography, Button } from "@mui/material";
 import { cardStyle, cardMediaStyle } from "../styles/productCard";
-import { currentCard } from '../store/actions';
+import { currentCard, valueForm } from '../store/actions';
 import DeleteModal from "./deletModal";
 import UpdateModal from "./updateModal";
 
@@ -48,6 +48,7 @@ const ProductCard = ({ title, description, imgUrl, id}) =>{
         <Button variant="outlined" color="error" onClick={()=>{
           handleUpdateOpenModal()
           dispatch(currentCard(id))
+          dispatch(valueForm(id))
           console.log(currentCard(id))
         }}>
           Change

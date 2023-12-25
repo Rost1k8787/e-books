@@ -1,8 +1,9 @@
-import { ADD_CARD,  CURRENT_CARD, RENDER_CARD, DELETE_CARD, UPDATE_CARD } from './actionTypes';
+import { ADD_CARD,  CURRENT_CARD, RENDER_CARD, DELETE_CARD, UPDATE_CARD, VALUE_FORM } from './actionTypes';
 
 const initialState = {
   cards: [],
   cardData : [],
+  data : {title : "", year: "", author: "", imgUrl : ""}
 };
 
 const cardReducer = (state = initialState, action) => {
@@ -34,8 +35,12 @@ const cardReducer = (state = initialState, action) => {
      item._id === action.payload._id
       ? { ...item, ...action.payload }
       : item
-  )
-};
+  )};
+  case VALUE_FORM :
+    return {
+      ...state,
+      data : state.cardData.find(item => item._id === action.payload)
+    }
     default:
       return state;
   }
