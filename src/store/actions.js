@@ -1,4 +1,4 @@
-import { ADD_CARD,  CURRENT_CARD, RENDER_CARD, DELETE_CARD, UPDATE_CARD } from './actionTypes';
+import { ADD_CARD,  CURRENT_CARD, RENDER_CARD, DELETE_CARD, UPDATE_CARD, VALUE_FORM } from './actionTypes';
 
 
 export const addCard = (card) => ({
@@ -25,3 +25,8 @@ export const updateCard = (updatedCard) => ({
   type : UPDATE_CARD,
   payload : updatedCard
 });
+
+export const valueForm = (id) => ({
+  type : VALUE_FORM, 
+  payload : id
+})
