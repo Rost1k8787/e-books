@@ -21,6 +21,7 @@ const UpdateModal = ({ isOpen, closeModal }) => {
 
   const dispatch = useDispatch();
   const currentCard = useSelector(state => state.currentCard);
+  const data = useSelector(state=> state.data)
 
 
   const validateTitle = (title) => {
@@ -61,6 +62,7 @@ const UpdateModal = ({ isOpen, closeModal }) => {
   const lowerCaseURL = url.toLowerCase();
   const isImage = imageExtensions.some((ext) => lowerCaseURL.endsWith(ext));
 
+
   return isImage; 
 };
 
@@ -90,16 +92,19 @@ const UpdateModal = ({ isOpen, closeModal }) => {
 
 const handleUpdateBook = async () => {
   if (validateTitle(title) && validateYear(year) && validateAuthor(author) && validateImageURL(imgUrl)) {
+    
     const updatedObject = {
-        id : _id,
+
         title: title,
         year: parseInt(year),
         author: author,
         imgUrl: imgUrl
     };
     try {
-      const response = await axios.put(`https://booksback.vercel.app/api/books/${currentCard}`,updatedObject );
-      dispatch(updateCard(updatedObject));
+      const response = await axios.put(`https://booksback.vercel.app/api/books/${currentCard}`, updatedObject );
+      console.log(currentCard);
+      dispatch(updateCard({_id:currentCard._id,...updatedObject}));
+      console.log({_id:currentCard,...updatedObject});
       closeModal();
 
     } catch (error) {
@@ -139,7 +144,7 @@ const handleUpdateBook = async () => {
     <input
       type="text"
       placeholder="Title*"
-      value={title}
+      value={data.title} 
       onChange={handleTitleChange}
       style={inputStyle}
     />
@@ -161,7 +166,7 @@ const handleUpdateBook = async () => {
     <input
       type="number"
       placeholder="Year*"
-      value={year}
+      value={data.year}
       onChange={handleYearChange}
       style={inputStyle}
     />
@@ -183,7 +188,7 @@ const handleUpdateBook = async () => {
     <input
       type="text"
       placeholder="Author*"
-      value={author}
+      value={data.author}
       onChange={handleAuthorChange}
       style={inputStyle}
     />
@@ -205,7 +210,7 @@ const handleUpdateBook = async () => {
     <input
       type="text"
       placeholder="Image Adress*"
-      value={imgUrl}
+      value={data.imgUrl}
       onChange={handleImgUrlChange}
       style={inputStyle}
     />
