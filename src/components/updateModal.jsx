@@ -10,6 +10,7 @@ import { modalStyle, inputStyle, btnFlex } from "../styles/modal";
 
 
 const UpdateModal = ({ isOpen, closeModal }) => {
+  
   const [title, setTitle] = useState("");
   const [year, setYear] = useState("");
   const [author, setAuthor] = useState("");
@@ -21,7 +22,15 @@ const UpdateModal = ({ isOpen, closeModal }) => {
 
   const dispatch = useDispatch();
   const currentCard = useSelector(state => state.currentCard);
-  const data = useSelector(state=> state.data)
+  const data = useSelector(state=> state.data);
+
+  useEffect(() => {
+    if (!title) setTitle(data.title);
+    if (!year) setYear(data.year);
+    if (!author) setAuthor(data.author);
+    if (!imgUrl) setImgUrl(data.imgUrl);
+  }, [data, title, year, author, imgUrl]);
+
 
 
   const validateTitle = (title) => {
@@ -91,7 +100,7 @@ const UpdateModal = ({ isOpen, closeModal }) => {
 };
 
 const handleUpdateBook = async () => {
-  if (validateTitle(title) && validateYear(year) && validateAuthor(author) && validateImageURL(imgUrl)) {
+  if (validateTitle(title) && validateYear(year) && validateAuthor(author)) {
     
     const updatedObject = {
 
@@ -144,7 +153,7 @@ const handleUpdateBook = async () => {
     <input
       type="text"
       placeholder="Title*"
-      value={data.title} 
+      value={title} 
       onChange={handleTitleChange}
       style={inputStyle}
     />
@@ -166,7 +175,7 @@ const handleUpdateBook = async () => {
     <input
       type="number"
       placeholder="Year*"
-      value={data.year}
+      value={year}
       onChange={handleYearChange}
       style={inputStyle}
     />
@@ -188,7 +197,7 @@ const handleUpdateBook = async () => {
     <input
       type="text"
       placeholder="Author*"
-      value={data.author}
+      value={author}
       onChange={handleAuthorChange}
       style={inputStyle}
     />
@@ -210,7 +219,7 @@ const handleUpdateBook = async () => {
     <input
       type="text"
       placeholder="Image Adress*"
-      value={data.imgUrl}
+      value={imgUrl}
       onChange={handleImgUrlChange}
       style={inputStyle}
     />
